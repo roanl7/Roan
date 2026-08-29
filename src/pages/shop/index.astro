@@ -1,0 +1,139 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import SEO from '@/components/SEO.astro';
+import Hero from '@/components/Hero.astro';
+import ProductCard from '@/components/ProductCard.astro';
+import { CATEGORIES } from '@/data/site';
+import { getCollection } from 'astro:content';
+
+const products = (await getCollection('products')).sort((a, b) =>
+  a.data.name.localeCompare(b.data.name)
+);
+---
+
+<BaseLayout>
+  <Fragment slot="head">
+    <SEO
+      title="Shop — ROAN"
+      description="Browse ROAN's full product picks across tech, skincare & beauty, books, audiobooks and tools."
+      path="/shop"
+    />
+  </Fragment>
+
+  <Hero
+    eyebrow="Shop"
+    title="Discover what's worth adding to your life"
+    subtitle="Every product here has its own editorial page — search, filter by category, or browse everything at once."
+  />
+
+  <section class="section">
+    <div class="container">
+      <div class="shop-controls">
+        <label for="shop-search" class="visually-hidden">Search products</label>
+        <input id="shop-search" type="search" placeholder="Search products…" data-shop-search />
+
+        <div class="shop-filters" role="group" aria-label="Filter by category">
+          <button type="button" class="filter-chip is-active" data-filter="all">All</button>
+          {CATEGORIES.map((c) => (
+            <button type="button" class="filter-chip" data-filter={c.slug}>{c.shortLabel}</button>
+          ))}
+        </div>
+      </div>
+
+      <div class="grid grid--3" data-shop-grid>
+        {products.map((p) => (
+          <div data-shop-item data-category={p.data.category} data-name={p.data.name.toLowerCase()}>
+            <ProductCard
+              slug={p.slug}
+              name={p.data.name}
+              category={p.data.category}
+              excerpt={p.data.excerpt}
+              image={p.data.heroImage?.url}
+              imageAlt={p.data.heroImage?.alt}
+              badge={p.data.badge}
+              language={p.data.language}
+            />
+          </div>
+        ))}
+      </div>
+      <p class="shop-empty" data-shop-empty hidden>No products match your search or filter.</p>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const search = document.querySelector<HTMLInputElement>('[data-shop-search]');
+  const chips = document.querySelectorAll<HTMLButtonElement>('.filter-chip');
+  const items = document.querySelectorAll<HTMLElement>('[data-shop-item]');
+  const emptyState = document.querySelector<HTMLElement>('[data-shop-empty]');
+  let activeFilter = 'all';
+
+  function applyFilters() {
+    const term = (search?.value ?? '').trim().toLowerCase();
+    let visibleCount = 0;
+    items.forEach((item) => {
+      const matchesCategory = activeFilter === 'all' || item.dataset.category === activeFilter;
+      const matchesSearch = !term || item.dataset.name?.includes(term);
+      const visible = matchesCategory && matchesSearch;
+      item.hidden = !visible;
+      if (visible) visibleCount++;
+    });
+    if (emptyState) emptyState.hidden = visibleCount !== 0;
+  }
+
+  chips.forEach((chip) => {
+    chip.addEventListener('click', () => {
+      chips.forEach((c) => c.classList.remove('is-active'));
+      chip.classList.add('is-active');
+      activeFilter = chip.dataset.filter ?? 'all';
+      applyFilters();
+    });
+  });
+
+  search?.addEventListener('input', applyFilters);
+</script>
+
+<style>
+  .shop-controls {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin-bottom: var(--space-4);
+  }
+  #shop-search {
+    width: 100%;
+    max-width: 360px;
+    padding: 0.7em 1em;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-body);
+  }
+  .shop-filters {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .filter-chip {
+    padding: 0.5em 1.1em;
+    border: 1px solid var(--color-border);
+    background: var(--color-white);
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-family: var(--font-body);
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+  .filter-chip:hover {
+    border-color: var(--color-accent);
+  }
+  .filter-chip.is-active {
+    background: var(--color-ink);
+    color: var(--color-white);
+    border-color: var(--color-ink);
+  }
+  .shop-empty {
+    text-align: center;
+    color: var(--color-muted);
+    padding: var(--space-4) 0;
+  }
+</style>

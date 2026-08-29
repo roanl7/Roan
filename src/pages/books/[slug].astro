@@ -1,0 +1,142 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import SEO from '@/components/SEO.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import ProductGallery from '@/components/ProductGallery.astro';
+import CTAButton from '@/components/CTAButton.astro';
+import AffiliateDisclosure from '@/components/AffiliateDisclosure.astro';
+import RelatedProducts from '@/components/RelatedProducts.astro';
+import { CATEGORIES } from '@/data/site';
+import { getCollection, render } from 'astro:content';
+import { productJsonLd, breadcrumbJsonLd, canonicalUrl } from '@/utils/seo';
+
+const CATEGORY_SLUG = 'books' as const;
+
+export async function getStaticPaths() {
+  const products = await getCollection('products', (p) => p.data.category === 'books');
+  return products.map((product) => ({
+    params: { slug: product.slug },
+    props: { product },
+  }));
+}
+
+const { product } = Astro.props;
+const { Content } = await render(product);
+const categoryMeta = CATEGORIES.find((c) => c.slug === CATEGORY_SLUG)!;
+const allProducts = await getCollection('products');
+const related = allProducts
+  .filter((p) => p.data.category === CATEGORY_SLUG && p.slug !== product.slug)
+  .slice(0, 3);
+
+const path = `${categoryMeta.path}/${product.slug}`;
+const jsonLd = [
+  productJsonLd({
+    name: product.data.name,
+    description: product.data.seoDescription,
+    image: product.data.heroImage?.url,
+    url: canonicalUrl(path),
+  }),
+  breadcrumbJsonLd([
+    { name: categoryMeta.label, url: canonicalUrl(categoryMeta.path) },
+    { name: product.data.name, url: canonicalUrl(path) },
+  ]),
+];
+---
+
+<BaseLayout>
+  <Fragment slot="head">
+    <SEO
+      title={product.data.seoTitle ?? product.data.name}
+      description={product.data.seoDescription}
+      path={path}
+      image={product.data.heroImage?.url}
+      type="product"
+      jsonLd={jsonLd}
+    />
+  </Fragment>
+
+  <section class="section--tight">
+    <div class="container">
+      <Breadcrumbs items={[{ label: categoryMeta.label, path: categoryMeta.path }, { label: product.data.name, path }]} />
+    </div>
+  </section>
+
+  <section class="product-hero">
+    <div class="container product-hero-grid">
+      <ProductGallery hero={product.data.heroImage} gallery={product.data.galleryImages} name={product.data.name} />
+      <div class="product-hero-copy">
+        {product.data.badge && <span class="eyebrow">{product.data.badge}</span>}
+        {product.data.language === 'pt' && <span class="lang-flag">Conteúdo em Português</span>}
+        <h1>{product.data.name}</h1>
+        <p class="product-excerpt">{product.data.excerpt}</p>
+        <CTAButton href={product.data.affiliateUrl} label={product.data.ctaLabel} />
+        <div class="product-hero-disclosure">
+          <AffiliateDisclosure text={product.data.disclosureText} />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container product-content">
+      <Content />
+      <div class="product-bottom-cta">
+        <CTAButton href={product.data.affiliateUrl} label={product.data.ctaLabel} />
+      </div>
+    </div>
+  </section>
+
+  {related.length > 0 && (
+    <section class="section section--paper">
+      <div class="container">
+        <RelatedProducts products={related} title={`More from ${categoryMeta.label}`} />
+      </div>
+    </section>
+  )}
+</BaseLayout>
+
+<style>
+  .product-hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+    align-items: start;
+  }
+  .product-excerpt {
+    color: var(--color-muted);
+    font-size: 1.05rem;
+    max-width: 46ch;
+  }
+  .product-hero-disclosure {
+    margin-top: var(--space-2);
+  }
+  .lang-flag {
+    display: inline-block;
+    background: var(--color-accent);
+    color: var(--color-ink);
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.25em 0.6em;
+    border-radius: var(--radius-sm);
+    margin-bottom: 0.5rem;
+  }
+  .product-content {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .product-content :global(h2) {
+    margin-top: var(--space-4);
+  }
+  .product-content :global(ul) {
+    padding-left: 1.2em;
+  }
+  .product-bottom-cta {
+    margin-top: var(--space-4);
+    text-align: center;
+  }
+  @media (max-width: 780px) {
+    .product-hero-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

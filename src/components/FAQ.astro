@@ -1,0 +1,47 @@
+---
+interface QA {
+  question: string;
+  answer: string;
+}
+interface Props {
+  items: QA[];
+  title?: string;
+}
+const { items, title = 'Frequently asked questions' } = Astro.props;
+---
+
+{items.length > 0 && (
+  <div class="faq">
+    <h2>{title}</h2>
+    <div class="faq-list">
+      {items.map((item) => (
+        <details class="faq-item">
+          <summary>{item.question}</summary>
+          <p>{item.answer}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+)}
+
+<style>
+  .faq-list {
+    border-top: 1px solid var(--color-border);
+  }
+  .faq-item {
+    border-bottom: 1px solid var(--color-border);
+    padding: var(--space-2) 0;
+  }
+  .faq-item summary {
+    cursor: pointer;
+    font-weight: 600;
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    color: var(--color-ink);
+    padding: 0.4rem 0;
+  }
+  .faq-item p {
+    color: var(--color-muted);
+    margin-top: 0.6rem;
+  }
+</style>

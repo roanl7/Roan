@@ -1,0 +1,26 @@
+---
+import ProductGrid from './ProductGrid.astro';
+
+interface ProductLike {
+  slug: string;
+  data: {
+    name: string;
+    category: string;
+    excerpt: string;
+    heroImage: { url: string; alt: string };
+    badge?: string;
+  };
+}
+interface Props {
+  products: ProductLike[];
+  title?: string;
+}
+const { products, title = 'You might also like' } = Astro.props;
+---
+
+{products.length > 0 && (
+  <div class="related-products">
+    <h2>{title}</h2>
+    <ProductGrid products={products} columns={3} />
+  </div>
+)}

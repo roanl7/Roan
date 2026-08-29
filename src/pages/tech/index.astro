@@ -1,0 +1,48 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import SEO from '@/components/SEO.astro';
+import Hero from '@/components/Hero.astro';
+import ProductGrid from '@/components/ProductGrid.astro';
+import ArticleCard from '@/components/ArticleCard.astro';
+import { CATEGORIES } from '@/data/site';
+import { getCollection } from 'astro:content';
+import { breadcrumbJsonLd, canonicalUrl } from '@/utils/seo';
+
+const category = CATEGORIES.find((c) => c.slug === 'tech')!;
+const products = (await getCollection('products')).filter((p) => p.data.category === 'tech');
+const articles = (await getCollection('articles')).filter((a) => a.data.category === 'tech');
+
+const jsonLd = breadcrumbJsonLd([{ name: 'Tech', url: canonicalUrl('/tech') }]);
+---
+
+<BaseLayout>
+  <Fragment slot="head">
+    <SEO
+      title="Tech — ROAN"
+      description="Everyday tech worth having on your desk, in your bag, or on your ears — an editorial edit from ROAN."
+      path="/tech"
+      jsonLd={jsonLd}
+    />
+  </Fragment>
+
+  <Hero eyebrow="Category" title="Tech" subtitle={category.description} />
+
+  <section class="section">
+    <div class="container">
+      <ProductGrid products={products} columns={3} />
+    </div>
+  </section>
+
+  {articles.length > 0 && (
+    <section class="section section--paper">
+      <div class="container">
+        <h2>Related reading</h2>
+        <div class="grid grid--3">
+          {articles.map((a) => (
+            <ArticleCard slug={a.slug} title={a.data.title} excerpt={a.data.excerpt} image={a.data.heroImage} />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+</BaseLayout>

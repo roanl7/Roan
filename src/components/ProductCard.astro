@@ -1,0 +1,146 @@
+---
+import { CATEGORIES } from '@/data/site';
+
+interface Props {
+  slug: string;
+  name: string;
+  category: string;
+  excerpt: string;
+  image?: string;
+  imageAlt?: string;
+  badge?: string;
+  language?: 'en' | 'pt';
+}
+const { slug, name, category, excerpt, image, imageAlt, badge, language = 'en' } = Astro.props;
+const categoryMeta = CATEGORIES.find((c) => c.slug === category);
+const href = `/${category}/${slug}`;
+---
+
+<article class="card product-card">
+  <a href={href} class="product-card-media">
+    {image ? (
+      <img src={image} alt={imageAlt ?? name} loading="lazy" width="600" height="600" />
+    ) : (
+      <div class="product-card-placeholder" aria-hidden="true">
+        <span>{name}</span>
+      </div>
+    )}
+    {badge && <span class="product-card-badge">{badge}</span>}
+    {language === 'pt' && <span class="product-card-lang">PT</span>}
+  </a>
+  <div class="product-card-body">
+    {categoryMeta && <span class="product-card-category">{categoryMeta.shortLabel}</span>}
+    <h3><a href={href}>{name}</a></h3>
+    <p>{excerpt}</p>
+    <a href={href} class="product-card-link">Learn more →</a>
+  </div>
+</article>
+
+<style>
+  .product-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .product-card-media {
+    position: relative;
+    display: block;
+    aspect-ratio: 1 / 1;
+    background: var(--color-paper);
+    overflow: hidden;
+  }
+
+  .product-card-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: var(--space-2);
+    transition: transform 0.3s ease;
+  }
+
+  .product-card:hover .product-card-media img {
+    transform: scale(1.03);
+  }
+
+  .product-card-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: var(--space-3);
+    background: repeating-linear-gradient(
+      135deg,
+      var(--color-border),
+      var(--color-border) 10px,
+      #ece9e2 10px,
+      #ece9e2 20px
+    );
+  }
+
+  .product-card-placeholder span {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    color: var(--color-muted);
+  }
+
+  .product-card-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: var(--color-ink);
+    color: var(--color-white);
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.3em 0.6em;
+    border-radius: var(--radius-sm);
+  }
+
+  .product-card-lang {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--color-accent);
+    color: var(--color-ink);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    padding: 0.3em 0.55em;
+    border-radius: var(--radius-sm);
+  }
+
+  .product-card-body {
+    padding: var(--space-3);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .product-card-category {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    font-weight: 600;
+  }
+
+  .product-card-body h3 {
+    font-size: 1.05rem;
+    margin: 0.35rem 0 0.5rem;
+  }
+
+  .product-card-body p {
+    font-size: 0.9rem;
+    color: var(--color-muted);
+    flex: 1;
+  }
+
+  .product-card-link {
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-top: var(--space-1);
+  }
+</style>

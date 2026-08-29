@@ -1,0 +1,48 @@
+---
+import ProductCard from './ProductCard.astro';
+
+interface ProductLike {
+  slug: string;
+  data: {
+    name: string;
+    category: string;
+    excerpt: string;
+    heroImage?: { url: string; alt: string };
+    badge?: string;
+    language?: 'en' | 'pt';
+  };
+}
+
+interface Props {
+  products: ProductLike[];
+  columns?: 2 | 3 | 4;
+}
+const { products, columns = 3 } = Astro.props;
+---
+
+{products.length > 0 ? (
+  <div class={`grid grid--${columns}`}>
+    {products.map((p) => (
+      <ProductCard
+        slug={p.slug}
+        name={p.data.name}
+        category={p.data.category}
+        excerpt={p.data.excerpt}
+        image={p.data.heroImage?.url}
+        imageAlt={p.data.heroImage?.alt}
+        badge={p.data.badge}
+        language={p.data.language}
+      />
+    ))}
+  </div>
+) : (
+  <p class="empty-state">New picks for this category are in the works — check back soon.</p>
+)}
+
+<style>
+  .empty-state {
+    color: var(--color-muted);
+    text-align: center;
+    padding: var(--space-4) 0;
+  }
+</style>

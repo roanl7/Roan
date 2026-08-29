@@ -1,0 +1,121 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import SEO from '@/components/SEO.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import RelatedProducts from '@/components/RelatedProducts.astro';
+import { getCollection, render } from 'astro:content';
+import { articleJsonLd, breadcrumbJsonLd, canonicalUrl } from '@/utils/seo';
+
+export async function getStaticPaths() {
+  const articles = await getCollection('articles');
+  return articles.map((article) => ({
+    params: { slug: article.slug },
+    props: { article },
+  }));
+}
+
+const { article } = Astro.props;
+const { Content } = await render(article);
+const path = `/journal/${article.slug}`;
+
+const allProducts = await getCollection('products');
+const related = allProducts.filter((p) => article.data.relatedProducts.includes(p.slug));
+
+const jsonLd = [
+  articleJsonLd({
+    headline: article.data.title,
+    description: article.data.seoDescription,
+    datePublished: article.data.publishDate.toISOString(),
+    dateModified: article.data.updatedDate?.toISOString(),
+    image: article.data.heroImage?.url,
+    url: canonicalUrl(path),
+  }),
+  breadcrumbJsonLd([
+    { name: 'Journal', url: canonicalUrl('/journal') },
+    { name: article.data.title, url: canonicalUrl(path) },
+  ]),
+];
+---
+
+<BaseLayout>
+  <Fragment slot="head">
+    <SEO
+      title={article.data.seoTitle ?? article.data.title}
+      description={article.data.seoDescription}
+      path={path}
+      image={article.data.heroImage?.url}
+      type="article"
+      jsonLd={jsonLd}
+    />
+  </Fragment>
+
+  <section class="section--tight">
+    <div class="container">
+      <Breadcrumbs items={[{ label: 'Journal', path: '/journal' }, { label: article.data.title, path }]} />
+    </div>
+  </section>
+
+  <article class="article">
+    <div class="container article-header">
+      <span class="eyebrow">Journal</span>
+      <h1>{article.data.title}</h1>
+      <p class="article-excerpt">{article.data.excerpt}</p>
+    </div>
+
+    {article.data.heroImage && (
+      <div class="container">
+        <img
+          class="article-hero-image"
+          src={article.data.heroImage.url}
+          alt={article.data.heroImage.alt}
+          width="1200"
+          height="675"
+        />
+      </div>
+    )}
+
+    <div class="container article-content">
+      <Content />
+    </div>
+  </article>
+
+  {related.length > 0 && (
+    <section class="section section--paper">
+      <div class="container">
+        <RelatedProducts products={related} title="Mentioned in this story" />
+      </div>
+    </section>
+  )}
+</BaseLayout>
+
+<style>
+  .article-header {
+    max-width: 720px;
+    margin: 0 auto var(--space-3);
+    text-align: center;
+  }
+  .article-excerpt {
+    color: var(--color-muted);
+    font-size: 1.1rem;
+  }
+  .article-hero-image {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto var(--space-4);
+    border-radius: var(--radius-md);
+  }
+  .article-content {
+    max-width: 720px;
+    margin: 0 auto;
+    padding-bottom: var(--space-5);
+  }
+  .article-content :global(h2) {
+    margin-top: var(--space-4);
+  }
+  .article-content :global(a) {
+    color: var(--color-ink);
+    text-decoration: underline;
+    text-decoration-color: var(--color-accent);
+    text-underline-offset: 3px;
+  }
+</style>

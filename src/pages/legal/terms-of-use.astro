@@ -1,0 +1,76 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import SEO from '@/components/SEO.astro';
+import Hero from '@/components/Hero.astro';
+import { SITE } from '@/data/site';
+---
+
+<BaseLayout>
+  <Fragment slot="head">
+    <SEO title="Terms of Use — ROAN" description="The terms that govern your use of the ROAN website." path="/legal/terms-of-use" />
+  </Fragment>
+
+  <Hero eyebrow="Legal" title="Terms of Use" />
+
+  <section class="section">
+    <div class="container legal-content">
+      <p><em>Last updated: August 2026</em></p>
+
+      <h2>Acceptance of Terms</h2>
+      <p>
+        By accessing or using this website, you agree to these Terms of Use. If you do not agree,
+        please do not use this site.
+      </p>
+
+      <h2>Nature of the Site</h2>
+      <p>
+        ROAN is an editorial and product-discovery publication. We do not sell products directly,
+        process payments, or ship goods. Purchases are completed on third-party retailer or
+        service-provider websites, subject to their own terms.
+      </p>
+
+      <h2>Editorial Content</h2>
+      <p>
+        Content on this site — including product descriptions, articles, and buying guides — is
+        provided for informational and editorial purposes. We aim for accuracy but do not
+        guarantee that all information, including pricing or availability shown on third-party
+        sites, is complete or current at the time you view it.
+      </p>
+
+      <h2>Affiliate Relationships</h2>
+      <p>
+        ROAN participates in affiliate programs and may earn a commission or referral benefit from
+        qualifying purchases or sign-ups made through links on this site. See our
+        <a href="/legal/affiliate-disclosure">Affiliate Disclosure</a> for details.
+      </p>
+
+      <h2>Intellectual Property</h2>
+      <p>
+        The text, design, and original content on this site are the property of ROAN unless
+        otherwise noted. Product images and trademarks belong to their respective owners.
+      </p>
+
+      <h2>Limitation of Liability</h2>
+      <p>
+        ROAN provides this site "as is" without warranties of any kind. We are not liable for any
+        loss or damage arising from your use of this site or any third-party site linked from it.
+      </p>
+
+      <h2>Changes to These Terms</h2>
+      <p>We may update these Terms of Use from time to time. Continued use of the site after changes constitutes acceptance of the updated terms.</p>
+
+      <h2>Contact</h2>
+      <p>Questions about these terms can be sent to <a href={`mailto:${SITE.contactEmail}`}>{SITE.contactEmail}</a>.</p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .legal-content {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .legal-content h2 {
+    margin-top: var(--space-4);
+  }
+</style>

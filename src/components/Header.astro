@@ -1,0 +1,134 @@
+---
+import Logo from './Logo.astro';
+import { MAIN_NAV } from '@/data/site';
+
+const currentPath = Astro.url.pathname;
+function isActive(path: string) {
+  if (path === '/') return currentPath === '/';
+  return currentPath.startsWith(path);
+}
+---
+
+<header class="site-header">
+  <div class="container header-inner">
+    <Logo />
+
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-hidden="true" />
+    <label for="nav-toggle" class="nav-toggle-label" aria-label="Open menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </label>
+
+    <nav class="main-nav" aria-label="Main navigation">
+      <ul>
+        {MAIN_NAV.map((item) => (
+          <li>
+            <a href={item.path} aria-current={isActive(item.path) ? 'page' : undefined}>
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: var(--space-2);
+    padding-bottom: var(--space-2);
+    position: relative;
+  }
+
+  .main-nav ul {
+    list-style: none;
+    display: flex;
+    gap: var(--space-3);
+    margin: 0;
+    padding: 0;
+  }
+
+  .main-nav a {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--color-text);
+    padding-bottom: 3px;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+
+  .main-nav a:hover,
+  .main-nav a[aria-current='page'] {
+    color: var(--color-ink);
+    border-color: var(--color-accent);
+  }
+
+  .nav-toggle {
+    display: none;
+  }
+
+  .nav-toggle-label {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    cursor: pointer;
+    padding: 8px;
+  }
+
+  .nav-toggle-label span {
+    width: 22px;
+    height: 2px;
+    background: var(--color-ink);
+    display: block;
+  }
+
+  @media (max-width: 860px) {
+    .nav-toggle-label {
+      display: flex;
+    }
+
+    .main-nav {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: var(--color-white);
+      border-bottom: 1px solid var(--color-border);
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.25s ease;
+    }
+
+    .main-nav ul {
+      flex-direction: column;
+      gap: 0;
+      padding: var(--space-2) var(--space-3);
+    }
+
+    .main-nav li {
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .main-nav a {
+      display: block;
+      padding: var(--space-2) 0;
+    }
+
+    .nav-toggle:checked ~ .main-nav {
+      max-height: 480px;
+    }
+  }
+</style>

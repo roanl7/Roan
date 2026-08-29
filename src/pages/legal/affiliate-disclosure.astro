@@ -1,0 +1,68 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import SEO from '@/components/SEO.astro';
+import Hero from '@/components/Hero.astro';
+import { SITE } from '@/data/site';
+---
+
+<BaseLayout>
+  <Fragment slot="head">
+    <SEO title="Affiliate Disclosure — ROAN" description="How ROAN discloses affiliate relationships and referral links." path="/legal/affiliate-disclosure" />
+  </Fragment>
+
+  <Hero eyebrow="Legal" title="Affiliate Disclosure" />
+
+  <section class="section">
+    <div class="container legal-content">
+      <p><em>Last updated: August 2026</em></p>
+
+      <p>
+        ROAN is a reader-supported, editorial shopping guide. To keep the site running, we
+        participate in affiliate and referral programs. This page explains how that works.
+      </p>
+
+      <h2>Amazon Associates</h2>
+      <p>
+        As an Amazon Associate, ROAN earns from qualifying purchases. Product links to Amazon on
+        this site are affiliate links — if you click through and make a purchase, ROAN may receive
+        a small commission at no additional cost to you.
+      </p>
+
+      <h2>Revolut</h2>
+      <p>
+        This page contains a referral link. ROAN may receive a benefit if you sign up through the
+        link.
+      </p>
+
+      <h2>Other Affiliate Relationships</h2>
+      <p>
+        ROAN may also participate in other affiliate or referral programs, including but not
+        limited to Audible and Hotmart. Where applicable, we disclose these relationships clearly
+        on the relevant page or link.
+      </p>
+
+      <h2>Our Editorial Standard</h2>
+      <p>
+        Affiliate relationships do not determine which products we choose to write about or how we
+        write about them. We aim to describe products honestly and avoid unsupported claims,
+        whether or not a link is monetized.
+      </p>
+
+      <h2>Questions</h2>
+      <p>
+        If you have questions about our affiliate relationships, contact us at
+        <a href={`mailto:${SITE.contactEmail}`}> {SITE.contactEmail}</a>.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .legal-content {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .legal-content h2 {
+    margin-top: var(--space-4);
+  }
+</style>

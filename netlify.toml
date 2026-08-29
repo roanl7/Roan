@@ -1,0 +1,15 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# No custom 404 redirect needed: Astro's static build outputs dist/404.html,
+# and Netlify automatically serves it for any unmatched route with a 404
+# status. Adding a manual redirect here is unnecessary and can be fragile
+# depending on trailing-slash/clean-URL resolution.

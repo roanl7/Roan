@@ -1,0 +1,125 @@
+---
+import Logo from './Logo.astro';
+import { SITE, FOOTER_LINKS } from '@/data/site';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-brand">
+      <Logo variant="light" />
+      <p class="footer-tagline">{SITE.tagline}</p>
+      <p class="footer-contact">
+        <a href={`mailto:${SITE.contactEmail}`}>{SITE.contactEmail}</a>
+      </p>
+    </div>
+
+    <div class="footer-col">
+      <h4>Shop</h4>
+      <ul>
+        {FOOTER_LINKS.categories.map((c) => (
+          <li><a href={c.path}>{c.label}</a></li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        {FOOTER_LINKS.company.map((c) => (
+          <li><a href={c.path}>{c.label}</a></li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <ul>
+        {FOOTER_LINKS.legal.map((c) => (
+          <li><a href={c.path}>{c.label}</a></li>
+        ))}
+      </ul>
+    </div>
+  </div>
+
+  <div class="container footer-bottom">
+    <p>&copy; {year} {SITE.name}. All rights reserved.</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--color-ink);
+    color: var(--color-paper);
+    padding-top: var(--space-5);
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: var(--space-4);
+    padding-bottom: var(--space-4);
+  }
+
+  .footer-tagline {
+    font-family: var(--font-display);
+    font-style: italic;
+    color: var(--color-paper);
+    opacity: 0.85;
+    margin-top: var(--space-2);
+    max-width: 26ch;
+  }
+
+  .footer-contact a {
+    color: var(--color-accent);
+    font-size: 0.9rem;
+  }
+
+  .footer-col h4 {
+    color: var(--color-white);
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: var(--space-2);
+  }
+
+  .footer-col ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .footer-col a {
+    font-size: 0.9rem;
+    color: rgba(245, 245, 245, 0.75);
+    transition: color 0.2s ease;
+  }
+
+  .footer-col a:hover {
+    color: var(--color-accent);
+  }
+
+  .footer-bottom {
+    border-top: 1px solid rgba(245, 245, 245, 0.12);
+    padding: var(--space-3) 0;
+    font-size: 0.8rem;
+    color: rgba(245, 245, 245, 0.6);
+  }
+
+  @media (max-width: 860px) {
+    .footer-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .footer-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

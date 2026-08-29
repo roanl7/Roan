@@ -1,0 +1,242 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import SEO from '@/components/SEO.astro';
+import CategoryCard from '@/components/CategoryCard.astro';
+import ProductGrid from '@/components/ProductGrid.astro';
+import ArticleCard from '@/components/ArticleCard.astro';
+import FounderSection from '@/components/FounderSection.astro';
+import NewsletterCTA from '@/components/NewsletterCTA.astro';
+import AffiliateDisclosure from '@/components/AffiliateDisclosure.astro';
+import { CATEGORIES, SITE } from '@/data/site';
+import { getCollection } from 'astro:content';
+
+const allProducts = await getCollection('products');
+
+// Featured Products: the broad "worth knowing about" set across all categories.
+const featuredProducts = allProducts.filter((p) => p.data.featured).slice(0, 6);
+
+// Editorial Picks: a tighter, hand-picked set (badge === "Editor's Pick"),
+// kept distinct from Featured Products so the homepage reads as curated
+// storytelling rather than one repeated grid.
+const editorialPicks = allProducts.filter((p) => p.data.badge === "Editor's Pick").slice(0, 3);
+
+const techPicks = allProducts.filter((p) => p.data.category === 'tech').slice(0, 3);
+const skincarePicks = allProducts.filter((p) => p.data.category === 'skincare-beauty').slice(0, 3);
+const bookPicks = allProducts.filter((p) => p.data.category === 'books').slice(0, 3);
+const audiblePicks = allProducts.filter((p) => p.data.category === 'audible').slice(0, 3);
+const toolsPicks = allProducts.filter((p) => p.data.category === 'tools').slice(0, 3);
+
+const articles = (await getCollection('articles'))
+  .sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
+  .slice(0, 3);
+---
+
+<BaseLayout>
+  <Fragment slot="head">
+    <SEO
+      title="ROAN — Smart choices for modern living"
+      description={SITE.description}
+      path="/"
+    />
+  </Fragment>
+
+  <section class="hero hero--home">
+    <div class="container hero-inner">
+      <span class="eyebrow">An editorial shopping guide</span>
+      <h1>Smart choices for modern living.</h1>
+      <p class="hero-subtitle">
+        ROAN helps readers discover useful products, tools, books and ideas worth
+        considering — chosen with a simple standard: useful over hyped, honest over exaggerated.
+      </p>
+      <div class="hero-actions">
+        <a href="/shop" class="btn btn-primary">Explore the shop →</a>
+        <a href="/journal" class="btn btn-outline">Read the Journal</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <span class="eyebrow">Categories</span>
+      <h2>Where to start</h2>
+      <div class="grid grid--3">
+        {CATEGORIES.map((c) => (
+          <CategoryCard label={c.label} description={c.description} path={c.path} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {featuredProducts.length > 0 && (
+    <section class="section section--paper">
+      <div class="container">
+        <span class="eyebrow">Featured</span>
+        <h2>Featured products</h2>
+        <ProductGrid products={featuredProducts} columns={3} />
+      </div>
+    </section>
+  )}
+
+  {editorialPicks.length > 0 && (
+    <section class="section">
+      <div class="container">
+        <span class="eyebrow">Editorial</span>
+        <h2>Editorial picks</h2>
+        <p class="section-intro">A short list of the products our editors keep coming back to across categories.</p>
+        <ProductGrid products={editorialPicks} columns={3} />
+      </div>
+    </section>
+  )}
+
+  {techPicks.length > 0 && (
+    <section class="section section--paper">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">Tech</span>
+            <h2>Everyday tech worth having</h2>
+          </div>
+          <a href="/tech" class="section-link">View all Tech →</a>
+        </div>
+        <ProductGrid products={techPicks} columns={3} />
+      </div>
+    </section>
+  )}
+
+  {skincarePicks.length > 0 && (
+    <section class="section">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">Skincare & Beauty</span>
+            <h2>A considered edit</h2>
+          </div>
+          <a href="/skincare-beauty" class="section-link">View all Skincare →</a>
+        </div>
+        <ProductGrid products={skincarePicks} columns={3} />
+      </div>
+    </section>
+  )}
+
+  {bookPicks.length > 0 && (
+    <section class="section section--paper">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">Books & E-books</span>
+            <h2>Worth reading</h2>
+          </div>
+          <a href="/books" class="section-link">View all Books →</a>
+        </div>
+        <ProductGrid products={bookPicks} columns={3} />
+      </div>
+    </section>
+  )}
+
+  {audiblePicks.length > 0 && (
+    <section class="section">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">Audible</span>
+            <h2>For your next listen</h2>
+          </div>
+          <a href="/audible" class="section-link">View all Audible →</a>
+        </div>
+        <ProductGrid products={audiblePicks} columns={3} />
+      </div>
+    </section>
+  )}
+
+  {toolsPicks.length > 0 && (
+    <section class="section section--paper">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">Tools & Services</span>
+            <h2>Worth setting up</h2>
+          </div>
+          <a href="/tools" class="section-link">View all Tools →</a>
+        </div>
+        <ProductGrid products={toolsPicks} columns={3} />
+      </div>
+    </section>
+  )}
+
+  <FounderSection />
+
+  {articles.length > 0 && (
+    <section class="section">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">Journal</span>
+            <h2>Latest stories</h2>
+          </div>
+          <a href="/journal" class="section-link">View the Journal →</a>
+        </div>
+        <div class="grid grid--3">
+          {articles.map((a) => (
+            <ArticleCard slug={a.slug} title={a.data.title} excerpt={a.data.excerpt} image={a.data.heroImage} />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <NewsletterCTA />
+
+  <section class="section--tight">
+    <div class="container">
+      <AffiliateDisclosure variant="block" />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero--home {
+    padding: var(--space-6) 0 var(--space-5);
+    background: var(--color-paper);
+    border-bottom: 1px solid var(--color-border);
+    text-align: center;
+  }
+  .hero-inner {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .hero-subtitle {
+    font-size: 1.1rem;
+    color: var(--color-muted);
+    max-width: 56ch;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .hero-actions {
+    display: flex;
+    gap: var(--space-2);
+    justify-content: center;
+    margin-top: var(--space-3);
+    flex-wrap: wrap;
+  }
+  .section-intro {
+    color: var(--color-muted);
+    max-width: 60ch;
+    margin-bottom: var(--space-3);
+  }
+  .section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: var(--space-3);
+    gap: var(--space-2);
+    flex-wrap: wrap;
+  }
+  .section-heading h2 {
+    margin-bottom: 0;
+  }
+  .section-link {
+    font-size: 0.9rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+</style>

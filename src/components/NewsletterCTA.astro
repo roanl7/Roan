@@ -1,0 +1,53 @@
+---
+---
+<section class="newsletter section--dark section--tight">
+  <div class="container newsletter-inner">
+    <div>
+      <span class="eyebrow">Stay in the loop</span>
+      <h2>Good picks, delivered occasionally.</h2>
+      <p>Join the ROAN list for new editorial picks and buying guides. No spam, unsubscribe any time.</p>
+    </div>
+    <form class="newsletter-form" aria-label="Newsletter signup">
+      <label for="newsletter-email" class="visually-hidden">Email address</label>
+      <input id="newsletter-email" type="email" name="email" placeholder="you@email.com" required />
+      <button type="submit" class="btn btn-accent">Subscribe</button>
+    </form>
+  </div>
+</section>
+
+<style>
+  .newsletter-inner {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: var(--space-4);
+    align-items: center;
+  }
+  .newsletter p {
+    color: rgba(245, 245, 245, 0.75);
+    max-width: 46ch;
+  }
+  .newsletter-form {
+    display: flex;
+    gap: 0.6rem;
+  }
+  .newsletter-form input {
+    flex: 1;
+    padding: 0.85em 1em;
+    border: 1px solid rgba(245, 245, 245, 0.3);
+    background: transparent;
+    color: var(--color-white);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-body);
+  }
+  .newsletter-form input::placeholder {
+    color: rgba(245, 245, 245, 0.5);
+  }
+  @media (max-width: 780px) {
+    .newsletter-inner {
+      grid-template-columns: 1fr;
+    }
+    .newsletter-form {
+      flex-direction: column;
+    }
+  }
+</style>

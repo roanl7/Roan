@@ -1,0 +1,44 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import SEO from '@/components/SEO.astro';
+---
+
+<BaseLayout>
+  <Fragment slot="head">
+    <SEO title="Page Not Found — ROAN" description="This page could not be found." path="/404" noindex={true} />
+  </Fragment>
+
+  <section class="not-found">
+    <div class="container">
+      <span class="eyebrow">404</span>
+      <h1>This page wandered off.</h1>
+      <p>The page you're looking for doesn't exist, may have moved, or the link may be outdated.</p>
+      <div class="not-found-actions">
+        <a href="/" class="btn btn-primary">Back to Home</a>
+        <a href="/shop" class="btn btn-outline">Explore the Shop</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    padding: var(--space-6) 0;
+    text-align: center;
+    background: var(--color-paper);
+    min-height: 50vh;
+    display: flex;
+    align-items: center;
+  }
+  .not-found p {
+    color: var(--color-muted);
+    max-width: 46ch;
+    margin: 0 auto var(--space-3);
+  }
+  .not-found-actions {
+    display: flex;
+    gap: var(--space-2);
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+</style>

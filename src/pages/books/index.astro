@@ -1,0 +1,29 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import SEO from '@/components/SEO.astro';
+import Hero from '@/components/Hero.astro';
+import ProductGrid from '@/components/ProductGrid.astro';
+import { CATEGORIES } from '@/data/site';
+import { getCollection } from 'astro:content';
+
+const category = CATEGORIES.find((c) => c.slug === 'books')!;
+const products = (await getCollection('products')).filter((p) => p.data.category === 'books');
+---
+
+<BaseLayout>
+  <Fragment slot="head">
+    <SEO
+      title="Books & E-books — ROAN"
+      description="Reading recommendations and e-book picks for people who like to learn and unwind on their own terms."
+      path="/books"
+    />
+  </Fragment>
+
+  <Hero eyebrow="Category" title="Books & E-books" subtitle={category.description} />
+
+  <section class="section">
+    <div class="container">
+      <ProductGrid products={products} columns={3} />
+    </div>
+  </section>
+</BaseLayout>

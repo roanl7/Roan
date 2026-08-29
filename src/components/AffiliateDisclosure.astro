@@ -1,0 +1,28 @@
+---
+interface Props {
+  variant?: 'inline' | 'block';
+  text?: string;
+}
+const {
+  variant = 'inline',
+  text = 'As an Amazon Associate, ROAN earns from qualifying purchases. Some links on this page are affiliate links, which means we may receive a benefit if you make a purchase — at no extra cost to you.',
+} = Astro.props;
+---
+
+<p class:list={['affiliate-disclosure', `affiliate-disclosure--${variant}`]}>
+  {text}
+</p>
+
+<style>
+  .affiliate-disclosure {
+    font-size: 0.8rem;
+    color: var(--color-muted);
+    margin: 0;
+  }
+  .affiliate-disclosure--block {
+    background: var(--color-paper);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: var(--space-2) var(--space-3);
+  }
+</style>

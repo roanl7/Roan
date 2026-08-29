@@ -1,0 +1,67 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import SEO from '@/components/SEO.astro';
+import Hero from '@/components/Hero.astro';
+import ProductGrid from '@/components/ProductGrid.astro';
+import ArticleCard from '@/components/ArticleCard.astro';
+import { CATEGORIES } from '@/data/site';
+import { getCollection } from 'astro:content';
+import { breadcrumbJsonLd, canonicalUrl } from '@/utils/seo';
+
+const category = CATEGORIES.find((c) => c.slug === 'skincare-beauty')!;
+const products = (await getCollection('products')).filter((p) => p.data.category === 'skincare-beauty');
+const articles = (await getCollection('articles')).filter((a) => a.data.category === 'skincare-beauty');
+
+const jsonLd = breadcrumbJsonLd([{ name: 'Skincare & Beauty', url: canonicalUrl('/skincare-beauty') }]);
+---
+
+<BaseLayout>
+  <Fragment slot="head">
+    <SEO
+      title="Skincare & Beauty — ROAN"
+      description="A considered edit of skincare and beauty products, from cult-favorite serums to at-home tools."
+      path="/skincare-beauty"
+      jsonLd={jsonLd}
+    />
+  </Fragment>
+
+  <Hero eyebrow="Category" title="Skincare & Beauty" subtitle={category.description} />
+
+  <section class="section">
+    <div class="container">
+      <ProductGrid products={products} columns={3} />
+    </div>
+  </section>
+
+  <section class="section--tight">
+    <div class="container">
+      <p class="skincare-note">
+        ROAN's skincare coverage is editorial, not medical advice. Always check the
+        full ingredient list and consult a dermatologist for guidance specific to your skin.
+      </p>
+    </div>
+  </section>
+
+  {articles.length > 0 && (
+    <section class="section section--paper">
+      <div class="container">
+        <h2>Related reading</h2>
+        <div class="grid grid--3">
+          {articles.map((a) => (
+            <ArticleCard slug={a.slug} title={a.data.title} excerpt={a.data.excerpt} image={a.data.heroImage} />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+</BaseLayout>
+
+<style>
+  .skincare-note {
+    font-size: 0.85rem;
+    color: var(--color-muted);
+    text-align: center;
+    max-width: 60ch;
+    margin: 0 auto;
+  }
+</style>

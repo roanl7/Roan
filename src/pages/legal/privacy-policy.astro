@@ -1,0 +1,87 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import SEO from '@/components/SEO.astro';
+import Hero from '@/components/Hero.astro';
+import { SITE } from '@/data/site';
+---
+
+<BaseLayout>
+  <Fragment slot="head">
+    <SEO title="Privacy Policy — ROAN" description="How ROAN handles information from visitors to this site." path="/legal/privacy-policy" />
+  </Fragment>
+
+  <Hero eyebrow="Legal" title="Privacy Policy" />
+
+  <section class="section">
+    <div class="container legal-content">
+      <p><em>Last updated: August 2026</em></p>
+
+      <h2>Overview</h2>
+      <p>
+        This Privacy Policy explains how ROAN ("ROAN," "we," "us") handles information in
+        connection with your use of this website. ROAN is an editorial and product-discovery
+        publication; we do not operate an online store or process payments directly.
+      </p>
+
+      <h2>Information We Collect</h2>
+      <p>
+        ROAN may collect basic, non-identifying information through standard website analytics,
+        such as pages visited and general browser or device information. If you contact us by
+        email or sign up for our newsletter, we collect the information you provide, such as your
+        email address.
+      </p>
+
+      <h2>Cookies and Similar Technologies</h2>
+      <p>
+        This site may use cookies or similar technologies for basic site functionality and
+        analytics. You can control cookies through your browser settings.
+      </p>
+
+      <h2>Third-Party Links and Affiliate Programs</h2>
+      <p>
+        ROAN participates in affiliate programs, including the Amazon Associates program, and may
+        include referral links to other services. When you click a link to a third-party site,
+        that site's own privacy policy governs any information collected there. ROAN does not
+        control and is not responsible for the privacy practices of third-party sites.
+      </p>
+
+      <h2>How We Use Information</h2>
+      <p>
+        Any information we collect is used to operate and improve this website, respond to
+        inquiries, and, where you've opted in, send occasional newsletter updates.
+      </p>
+
+      <h2>Data Retention and Security</h2>
+      <p>
+        We retain information only as long as reasonably necessary for the purposes described
+        here, and we take reasonable steps to protect it. No method of transmission or storage is
+        completely secure.
+      </p>
+
+      <h2>Your Choices</h2>
+      <p>
+        You can unsubscribe from newsletter emails at any time using the link included in those
+        emails, or by contacting us directly.
+      </p>
+
+      <h2>Children's Privacy</h2>
+      <p>This site is not directed at children and does not knowingly collect information from children.</p>
+
+      <h2>Changes to This Policy</h2>
+      <p>We may update this Privacy Policy from time to time. Changes will be posted on this page.</p>
+
+      <h2>Contact</h2>
+      <p>Questions about this policy can be sent to <a href={`mailto:${SITE.contactEmail}`}>{SITE.contactEmail}</a>.</p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .legal-content {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .legal-content h2 {
+    margin-top: var(--space-4);
+  }
+</style>

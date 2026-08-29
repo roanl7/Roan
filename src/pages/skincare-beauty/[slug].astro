@@ -1,0 +1,137 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import SEO from '@/components/SEO.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import ProductGallery from '@/components/ProductGallery.astro';
+import CTAButton from '@/components/CTAButton.astro';
+import AffiliateDisclosure from '@/components/AffiliateDisclosure.astro';
+import RelatedProducts from '@/components/RelatedProducts.astro';
+import { getCollection, render } from 'astro:content';
+import { productJsonLd, breadcrumbJsonLd, canonicalUrl } from '@/utils/seo';
+
+export async function getStaticPaths() {
+  const products = await getCollection('products', (p) => p.data.category === 'skincare-beauty');
+  return products.map((product) => ({
+    params: { slug: product.slug },
+    props: { product },
+  }));
+}
+
+const { product } = Astro.props;
+const { Content } = await render(product);
+const allProducts = await getCollection('products');
+const related = allProducts
+  .filter((p) => p.data.category === 'skincare-beauty' && p.slug !== product.slug)
+  .slice(0, 3);
+
+const path = `/skincare-beauty/${product.slug}`;
+const jsonLd = [
+  productJsonLd({
+    name: product.data.name,
+    description: product.data.seoDescription,
+    image: product.data.heroImage?.url,
+    url: canonicalUrl(path),
+  }),
+  breadcrumbJsonLd([
+    { name: 'Skincare & Beauty', url: canonicalUrl('/skincare-beauty') },
+    { name: product.data.name, url: canonicalUrl(path) },
+  ]),
+];
+---
+
+<BaseLayout>
+  <Fragment slot="head">
+    <SEO
+      title={product.data.seoTitle ?? product.data.name}
+      description={product.data.seoDescription}
+      path={path}
+      image={product.data.heroImage?.url}
+      type="product"
+      jsonLd={jsonLd}
+    />
+  </Fragment>
+
+  <section class="section--tight">
+    <div class="container">
+      <Breadcrumbs items={[{ label: 'Skincare & Beauty', path: '/skincare-beauty' }, { label: product.data.name, path }]} />
+    </div>
+  </section>
+
+  <section class="product-hero">
+    <div class="container product-hero-grid">
+      <ProductGallery hero={product.data.heroImage} gallery={product.data.galleryImages} name={product.data.name} />
+      <div class="product-hero-copy">
+        {product.data.badge && <span class="eyebrow">{product.data.badge}</span>}
+        <h1>{product.data.name}</h1>
+        <p class="product-excerpt">{product.data.excerpt}</p>
+        <CTAButton href={product.data.affiliateUrl} label={product.data.ctaLabel} />
+        <div class="product-hero-disclosure">
+          <AffiliateDisclosure text={product.data.disclosureText} />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container product-content">
+      <Content />
+      <p class="skincare-disclaimer">
+        This page is editorial content, not medical advice, and does not diagnose or treat any condition.
+      </p>
+      <div class="product-bottom-cta">
+        <CTAButton href={product.data.affiliateUrl} label={product.data.ctaLabel} />
+      </div>
+    </div>
+  </section>
+
+  {related.length > 0 && (
+    <section class="section section--paper">
+      <div class="container">
+        <RelatedProducts products={related} title="More from Skincare & Beauty" />
+      </div>
+    </section>
+  )}
+</BaseLayout>
+
+<style>
+  .product-hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+    align-items: start;
+  }
+  .product-excerpt {
+    color: var(--color-muted);
+    font-size: 1.05rem;
+    max-width: 46ch;
+  }
+  .product-hero-disclosure {
+    margin-top: var(--space-2);
+  }
+  .product-content {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .product-content :global(h2) {
+    margin-top: var(--space-4);
+  }
+  .product-content :global(ul) {
+    padding-left: 1.2em;
+  }
+  .skincare-disclaimer {
+    font-size: 0.8rem;
+    color: var(--color-muted);
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--space-2);
+    margin-top: var(--space-4);
+  }
+  .product-bottom-cta {
+    margin-top: var(--space-3);
+    text-align: center;
+  }
+  @media (max-width: 780px) {
+    .product-hero-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

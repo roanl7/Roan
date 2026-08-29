@@ -1,0 +1,40 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import SEO from '@/components/SEO.astro';
+import Hero from '@/components/Hero.astro';
+import { SITE } from '@/data/site';
+---
+
+<BaseLayout>
+  <Fragment slot="head">
+    <SEO
+      title="Contact — ROAN"
+      description="Get in touch with the ROAN team."
+      path="/contact"
+    />
+  </Fragment>
+
+  <Hero eyebrow="Contact" title="Get in touch" subtitle="Questions, feedback, or partnership inquiries — we read everything." />
+
+  <section class="section">
+    <div class="container contact-content">
+      <p>
+        The best way to reach ROAN is by email. We aim to respond within a few business days.
+      </p>
+      <a href={`mailto:${SITE.contactEmail}`} class="btn btn-primary">
+        {SITE.contactEmail}
+      </a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact-content {
+    max-width: 560px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .contact-content a {
+    margin-top: var(--space-2);
+  }
+</style>

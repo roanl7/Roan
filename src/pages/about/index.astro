@@ -1,0 +1,55 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import SEO from '@/components/SEO.astro';
+import Hero from '@/components/Hero.astro';
+import FounderSection from '@/components/FounderSection.astro';
+import AffiliateDisclosure from '@/components/AffiliateDisclosure.astro';
+---
+
+<BaseLayout>
+  <Fragment slot="head">
+    <SEO
+      title="About ROAN"
+      description="ROAN is an editorial shopping guide helping readers discover useful products, tools, books and ideas worth considering."
+      path="/about"
+    />
+  </Fragment>
+
+  <Hero eyebrow="About" title="About ROAN" subtitle="Smart choices for modern living." />
+
+  <section class="section">
+    <div class="container about-content">
+      <p>
+        ROAN was created with a simple idea: make it easier to discover products, tools and ideas
+        that are genuinely worth considering. The internet makes it easy to find endless options
+        and hard to find a clear opinion — ROAN exists to close that gap.
+      </p>
+      <p>
+        We cover tech, skincare and beauty, books, audiobooks, and tools and services, writing
+        editorial guides and product pages that focus on practical value over hype. Every product
+        featured is chosen and written about with the same standard: useful information, honest
+        framing, and no invented claims.
+      </p>
+      <h2>How ROAN works</h2>
+      <p>
+        ROAN is an independent editorial and shopping-discovery publication. When you follow a
+        link from ROAN and make a purchase or sign up on a retailer's site, ROAN may earn a
+        commission or referral benefit. This never changes the price you pay, and it never
+        determines which products we choose to feature.
+      </p>
+      <AffiliateDisclosure variant="block" />
+    </div>
+  </section>
+
+  <FounderSection />
+</BaseLayout>
+
+<style>
+  .about-content {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .about-content p {
+    font-size: 1.05rem;
+  }
+</style>
