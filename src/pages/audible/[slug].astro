@@ -13,9 +13,9 @@ import { productJsonLd, breadcrumbJsonLd, canonicalUrl } from '@/utils/seo';
 const CATEGORY_SLUG = 'audible' as const;
 
 export async function getStaticPaths() {
-  const products = await getCollection('products', (p) => p.data.category === 'audible');
+  const products = await getCollection('products', ({ data }) => data.category === 'audible');
   return products.map((product) => ({
-    params: { slug: product.slug },
+    params: { slug: product.slug.split('/').pop() },
     props: { product },
   }));
 }
