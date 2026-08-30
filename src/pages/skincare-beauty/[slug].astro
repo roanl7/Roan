@@ -7,12 +7,13 @@ import CTAButton from '@/components/CTAButton.astro';
 import AffiliateDisclosure from '@/components/AffiliateDisclosure.astro';
 import RelatedProducts from '@/components/RelatedProducts.astro';
 import { getCollection, render } from 'astro:content';
+import { getContentSlug } from '@/utils/content';
 import { productJsonLd, breadcrumbJsonLd, canonicalUrl } from '@/utils/seo';
 
 export async function getStaticPaths() {
   const products = await getCollection('products', (p) => p.data.category === 'skincare-beauty');
   return products.map((product) => ({
-    params: { slug: product.slug },
+    params: { slug: getContentSlug(product.slug) },
     props: { product },
   }));
 }
@@ -24,7 +25,8 @@ const related = allProducts
   .filter((p) => p.data.category === 'skincare-beauty' && p.slug !== product.slug)
   .slice(0, 3);
 
-const path = `/skincare-beauty/${product.slug}`;
+const slug = getContentSlug(product.slug);
+const path = `/skincare-beauty/${slug}`;
 const jsonLd = [
   productJsonLd({
     name: product.data.name,

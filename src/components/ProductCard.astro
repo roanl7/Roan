@@ -1,5 +1,6 @@
 ---
 import { CATEGORIES } from '@/data/site';
+import { getContentSlug } from '@/utils/content';
 
 interface Props {
   slug: string;
@@ -13,7 +14,7 @@ interface Props {
 }
 const { slug, name, category, excerpt, image, imageAlt, badge, language = 'en' } = Astro.props;
 const categoryMeta = CATEGORIES.find((c) => c.slug === category);
-const href = `/${category}/${slug}`;
+const href = `/${category}/${getContentSlug(slug)}`;
 ---
 
 <article class="card product-card">

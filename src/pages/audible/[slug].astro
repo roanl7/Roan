@@ -8,6 +8,7 @@ import AffiliateDisclosure from '@/components/AffiliateDisclosure.astro';
 import RelatedProducts from '@/components/RelatedProducts.astro';
 import { CATEGORIES } from '@/data/site';
 import { getCollection, render } from 'astro:content';
+import { getContentSlug } from '@/utils/content';
 import { productJsonLd, breadcrumbJsonLd, canonicalUrl } from '@/utils/seo'; // ✅ corrigido
 
 const CATEGORY_SLUG = 'audible' as const;
@@ -15,7 +16,7 @@ const CATEGORY_SLUG = 'audible' as const;
 export async function getStaticPaths() {
   const products = await getCollection('products', ({ data }) => data.category === 'audible');
   return products.map((product) => ({
-    params: { slug: product.slug.split('/').pop() },
+    params: { slug: getContentSlug(product.slug) },
     props: { product },
   }));
 }
@@ -28,7 +29,8 @@ const related = allProducts
   .filter((p) => p.data.category === CATEGORY_SLUG && p.slug !== product.slug)
   .slice(0, 3);
 
-const path = `${categoryMeta.path}/${product.slug}`;
+const slug = getContentSlug(product.slug);
+const path = `${categoryMeta.path}/${slug}`;
 const jsonLd = [
   productJsonLd({
     name: product.data.name,
