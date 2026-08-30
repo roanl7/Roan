@@ -4,7 +4,7 @@ export const SITE = {
   description:
     'ROAN is an editorial shopping guide helping readers discover useful products, tools, books and ideas worth considering.',
   contactEmail: 'roanlcontat@gmail.com',
-  url: 'https://roan.example.com',
+  url: 'https://roanl.netlify.app', // ✅ URL corrigida
 };
 
 export type CategorySlug = 'tech' | 'skincare-beauty' | 'books' | 'audible' | 'tools';
