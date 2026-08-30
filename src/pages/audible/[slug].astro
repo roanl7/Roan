@@ -8,7 +8,7 @@ import AffiliateDisclosure from '@/components/AffiliateDisclosure.astro';
 import RelatedProducts from '@/components/RelatedProducts.astro';
 import { CATEGORIES } from '@/data/site';
 import { getCollection, render } from 'astro:content';
-import { productJsonLd, breadcrumbJsonLd, canonicalUrl } from '@/utils/seo';
+import { productJsonLd, breadcrumbsJsonLd, canonicalUrl } from '@/utils/seo';
 
 const CATEGORY_SLUG = 'audible' as const;
 
@@ -36,7 +36,7 @@ const jsonLd = [
     image: product.data.heroImage?.url,
     url: canonicalUrl(path),
   }),
-  breadcrumbJsonLd([
+  breadcrumbsJsonLd([
     { name: categoryMeta.label, url: canonicalUrl(categoryMeta.path) },
     { name: product.data.name, url: canonicalUrl(path) },
   ]),
@@ -63,7 +63,11 @@ const jsonLd = [
 
   <section class="product-hero">
     <div class="container product-hero-grid">
-      <ProductGallery hero={product.data.heroImage} gallery={product.data.galleryImages} name={product.data.name} />
+      <ProductGallery
+        heroImage={product.data.heroImage}
+        galleryImages={product.data.galleryImages}
+        name={product.data.name}
+      />
       <div class="product-hero-copy">
         {product.data.badge && <span class="eyebrow">{product.data.badge}</span>}
         {product.data.language === 'pt' && <span class="lang-flag">Conteúdo em Português</span>}
