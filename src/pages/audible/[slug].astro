@@ -8,7 +8,7 @@ import AffiliateDisclosure from '@/components/AffiliateDisclosure.astro';
 import RelatedProducts from '@/components/RelatedProducts.astro';
 import { CATEGORIES } from '@/data/site';
 import { getCollection, render } from 'astro:content';
-import { productJsonLd, breadcrumbsJsonLd, canonicalUrl } from '@/utils/seo';
+import { productJsonLd, breadcrumbJsonLd, canonicalUrl } from '@/utils/seo'; // ✅ corrigido
 
 const CATEGORY_SLUG = 'audible' as const;
 
@@ -36,7 +36,7 @@ const jsonLd = [
     image: product.data.heroImage?.url,
     url: canonicalUrl(path),
   }),
-  breadcrumbsJsonLd([
+  breadcrumbJsonLd([ // ✅ corrigido
     { name: categoryMeta.label, url: canonicalUrl(categoryMeta.path) },
     { name: product.data.name, url: canonicalUrl(path) },
   ]),
